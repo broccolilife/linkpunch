@@ -8,6 +8,7 @@ import Banner3D, { BannerData } from "@/components/Banner3D";
 import StatsPanel from "@/components/StatsPanel";
 import { trackBannerClick, trackPageView } from "@/app/shared/client";
 import AvatarBadge from "@/components/AvatarBadge";
+import ThemeCustomizer, { useTheme } from "@/components/ThemeCustomizer";
 
 const introBanner: BannerData = {
   id: "aerolinks-intro",
@@ -143,6 +144,8 @@ function HomePageContent() {
   const isCreator = useMemo(() => searchParams?.get("creator") === "1", [searchParams]);
   const [hasWebGL, setHasWebGL] = useState(true);
   const [statsOpen, setStatsOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
+  const { themeName, selectTheme } = useTheme();
   const [viewportWidth, setViewportWidth] = useState<number>(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
@@ -267,6 +270,19 @@ function HomePageContent() {
             Show statistics
           </button>
           <StatsPanel isOpen={statsOpen} onClose={() => setStatsOpen(false)} banners={banners} />
+        </>
+      ) : null}
+
+      {isCreator ? (
+        <>
+          <button
+            type="button"
+            onClick={() => setThemeOpen(true)}
+            className="fixed bottom-5 right-5 z-50 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-semibold text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+          >
+            🎨 Theme
+          </button>
+          <ThemeCustomizer isOpen={themeOpen} onClose={() => setThemeOpen(false)} />
         </>
       ) : null}
     </div>
