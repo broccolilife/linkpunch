@@ -1,0 +1,130 @@
+/* tokens.css — LinkPunch
+   Design tokens as CSS custom properties
+   Three-layer system: global → semantic → component */
+
+:root {
+  /* ──── Global Colors ──── */
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+
+  --color-purple-50: #faf5ff;
+  --color-purple-500: #a855f7;
+  --color-purple-600: #9333ea;
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-gray-950: #030712;
+
+  --color-green-500: #22c55e;
+  --color-red-500: #ef4444;
+  --color-amber-500: #f59e0b;
+
+  /* ──── Semantic Colors ──── */
+  --bg-primary: #ffffff;
+  --bg-secondary: var(--color-gray-50);
+  --bg-tertiary: var(--color-gray-100);
+  --bg-inverse: var(--color-gray-900);
+
+  --fg-primary: var(--color-gray-900);
+  --fg-secondary: var(--color-gray-600);
+  --fg-tertiary: var(--color-gray-400);
+  --fg-inverse: #ffffff;
+
+  --accent-primary: var(--color-blue-600);
+  --accent-secondary: var(--color-purple-600);
+  --accent-hover: var(--color-blue-700);
+
+  --border-default: var(--color-gray-200);
+  --border-muted: var(--color-gray-100);
+
+  --status-success: var(--color-green-500);
+  --status-warning: var(--color-amber-500);
+  --status-danger: var(--color-red-500);
+
+  /* ──── Spacing (8pt grid) ──── */
+  --space-xxs: 0.125rem; /* 2px */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 0.75rem;   /* 12px */
+  --space-base: 1rem;    /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-xxl: 2.5rem;   /* 40px */
+  --space-xxxl: 3rem;    /* 48px */
+
+  /* ──── Typography ──── */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-display: 2.25rem;   /* 36px */
+  --text-title: 1.5rem;      /* 24px */
+  --text-headline: 1.25rem;  /* 20px */
+  --text-body: 1rem;         /* 16px */
+  --text-callout: 0.875rem;  /* 14px */
+  --text-caption: 0.75rem;   /* 12px */
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ──── Corner Radii ──── */
+  --radius-sm: 0.375rem;  /* 6px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 0.75rem;   /* 12px */
+  --radius-xl: 1rem;      /* 16px */
+  --radius-2xl: 1.5rem;   /* 24px */
+  --radius-full: 9999px;
+
+  /* ──── Shadows ──── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* ──── Transitions ──── */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ──── Dark Mode ──── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: var(--color-gray-950);
+    --bg-secondary: var(--color-gray-900);
+    --bg-tertiary: var(--color-gray-800);
+    --bg-inverse: #ffffff;
+
+    --fg-primary: var(--color-gray-50);
+    --fg-secondary: var(--color-gray-400);
+    --fg-tertiary: var(--color-gray-500);
+    --fg-inverse: var(--color-gray-900);
+
+    --accent-primary: var(--color-blue-500);
+    --accent-secondary: var(--color-purple-500);
+    --accent-hover: var(--color-blue-600);
+
+    --border-default: var(--color-gray-700);
+    --border-muted: var(--color-gray-800);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  }
+}
