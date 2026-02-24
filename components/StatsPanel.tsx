@@ -63,7 +63,7 @@ export default function StatsPanel({ isOpen, onClose, banners }: StatsPanelProps
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-8" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-8" role="dialog" aria-modal="true" data-slot="stats-panel">
       <div
         ref={panelRef}
         tabIndex={-1}
