@@ -110,6 +110,12 @@ section {
   }
 }
 
+/* ── Skeleton shimmer ── */
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* ── Container queries: because viewport breakpoints are a lie ── */
 [data-slot="card-container"] {
   container-type: inline-size;
