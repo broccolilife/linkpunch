@@ -110,6 +110,72 @@ section {
   }
 }
 
+/* ── Container queries: because viewport breakpoints are a lie ── */
+[data-slot="card-container"] {
+  container-type: inline-size;
+  container-name: card;
+}
+
+@container card (min-width: 480px) {
+  [data-slot="card"] {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+
+@container card (max-width: 320px) {
+  [data-slot="card"] {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* ── Card hover micro-interactions ── */
+[data-slot="card"] {
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+[data-slot="card"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+}
+
+[data-slot="card"]:active {
+  transform: scale(0.98);
+  transition-duration: 0.1s;
+}
+
+/* ── Button press feedback ── */
+button:not(:disabled):active {
+  transform: scale(0.97);
+  transition: transform 0.08s ease;
+}
+
+/* ── Staggered list entrance (CSS-only, nth-child indexing) ── */
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-slot="stagger-list"] > * {
+  animation: stagger-in 0.3s ease both;
+}
+
+[data-slot="stagger-list"] > *:nth-child(1) { animation-delay: 0ms; }
+[data-slot="stagger-list"] > *:nth-child(2) { animation-delay: 60ms; }
+[data-slot="stagger-list"] > *:nth-child(3) { animation-delay: 120ms; }
+[data-slot="stagger-list"] > *:nth-child(4) { animation-delay: 180ms; }
+[data-slot="stagger-list"] > *:nth-child(5) { animation-delay: 240ms; }
+[data-slot="stagger-list"] > *:nth-child(6) { animation-delay: 300ms; }
+[data-slot="stagger-list"] > *:nth-child(n+7) { animation-delay: 350ms; }
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
