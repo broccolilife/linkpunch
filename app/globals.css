@@ -82,3 +82,43 @@ textarea:focus-visible {
     to { opacity: 1; transform: translateY(0); }
   }
 }
+
+/* Smooth scroll & scroll-snap for sections */
+html {
+  scroll-behavior: smooth;
+}
+
+[data-slot="section"],
+section {
+  scroll-margin-top: 2rem;
+}
+
+.snap-container {
+  scroll-snap-type: y proximity;
+  overflow-y: auto;
+}
+
+.snap-container > section,
+.snap-container > [data-slot="section"] {
+  scroll-snap-align: start;
+}
+
+/* Smooth scroll for anchor links */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
