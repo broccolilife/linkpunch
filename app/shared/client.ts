@@ -2,12 +2,25 @@
 
 import UAParser from "ua-parser-js";
 
+export interface TimeSeriesPoint {
+  date: string;
+  views: number;
+  clicks: number;
+}
+
+export interface PerBannerTimeSeries {
+  id: string;
+  series: Array<{ date: string; clicks: number }>;
+}
+
 export interface StatsResponse {
   totalViews: number;
   uniqueVisitors: number;
   clicksByBanner: Array<{ id: string; clicks: number }>;
   devices: Array<{ device: string; count: number }>;
   topReferrers: Array<{ referrer: string; count: number }>;
+  timeSeries: TimeSeriesPoint[];
+  perBannerTimeSeries: PerBannerTimeSeries[];
 }
 
 const VISITOR_KEY = "aerolinks_visitor_id";

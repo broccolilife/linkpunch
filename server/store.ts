@@ -21,12 +21,25 @@ export type EventInput =
 
 export type StoredEvent = EventInput & { ts: number };
 
+export interface TimeSeriesPoint {
+  date: string;
+  views: number;
+  clicks: number;
+}
+
+export interface PerBannerTimeSeries {
+  id: string;
+  series: Array<{ date: string; clicks: number }>;
+}
+
 export interface StatsSummary {
   totalViews: number;
   uniqueVisitors: number;
   clicksByBanner: Array<{ id: string; clicks: number }>;
   devices: Array<{ device: string; count: number }>;
   topReferrers: Array<{ referrer: string; count: number }>;
+  timeSeries: TimeSeriesPoint[];
+  perBannerTimeSeries: PerBannerTimeSeries[];
 }
 
 async function ensureStorage() {
@@ -125,11 +138,55 @@ export async function getStats(): Promise<StatsSummary> {
     .sort((a, b) => b.count - a.count)
     .slice(0, 10);
 
+  // Build time series (last 28 days)
+  const now = Date.now();
+  const dayMs = 86400000;
+  const timeSeriesMap = new Map<string, { views: number; clicks: number }>();
+  const perBannerMap = new Map<string, Map<string, number>>();
+
+  for (let i = 27; i >= 0; i--) {
+    const d = new Date(now - i * dayMs);
+    const key = d.toISOString().slice(0, 10);
+    timeSeriesMap.set(key, { views: 0, clicks: 0 });
+  }
+
+  for (const event of events) {
+    const key = new Date(event.ts).toISOString().slice(0, 10);
+    const bucket = timeSeriesMap.get(key);
+    if (!bucket) continue;
+
+    if (event.type === "page_view") {
+      bucket.views += 1;
+    } else if (event.type === "banner_click") {
+      bucket.clicks += 1;
+      if (!perBannerMap.has(event.bannerId)) {
+        perBannerMap.set(event.bannerId, new Map());
+      }
+      const bannerDayMap = perBannerMap.get(event.bannerId)!;
+      bannerDayMap.set(key, (bannerDayMap.get(key) ?? 0) + 1);
+    }
+  }
+
+  const timeSeries = Array.from(timeSeriesMap.entries()).map(([date, data]) => ({
+    date,
+    views: data.views,
+    clicks: data.clicks
+  }));
+
+  const perBannerTimeSeries = Array.from(perBannerMap.entries()).map(([id, dayMap]) => ({
+    id,
+    series: Array.from(dayMap.entries())
+      .map(([date, clicks]) => ({ date, clicks }))
+      .sort((a, b) => a.date.localeCompare(b.date))
+  }));
+
   return {
     totalViews,
     uniqueVisitors: uniqueVisitors.size,
     clicksByBanner,
     devices,
-    topReferrers
+    topReferrers,
+    timeSeries,
+    perBannerTimeSeries
   };
 }
