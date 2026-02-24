@@ -1,3 +1,9 @@
+/**
+ * Homepage — renders the full 3D Aerolinks scene.
+ * Lays out an intro banner + platform link banners in a Canvas.
+ * Tracks page views on mount and banner clicks on open.
+ * Append ?creator=1 to access the analytics stats panel.
+ */
 "use client";
 
 import { Canvas } from "@react-three/fiber";

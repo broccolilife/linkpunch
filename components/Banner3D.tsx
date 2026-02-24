@@ -1,3 +1,9 @@
+/**
+ * Banner3D — A floating 3D card in the scene.
+ * Uses meshPhysicalMaterial for glass/metal PBR look.
+ * Supports flip interaction (click to rotate 180°) with spring-damped animation.
+ * Respects prefers-reduced-motion for float intensity.
+ */
 "use client";
 
 import { useCursor, Float, RoundedBox, Text, useTexture } from "@react-three/drei";

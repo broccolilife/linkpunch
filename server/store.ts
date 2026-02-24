@@ -1,6 +1,12 @@
+/**
+ * JSONL-based analytics persistence layer.
+ * Events are appended as newline-delimited JSON to data/events.jsonl.
+ * No database required — reads parse the full file for aggregation.
+ */
 import { promises as fs } from "fs";
 import path from "path";
 
+/** Resolve paths relative to project root */
 const dataDir = path.join(process.cwd(), "data");
 const eventsFile = path.join(dataDir, "events.jsonl");
 
@@ -29,6 +35,7 @@ export interface StatsSummary {
   topReferrers: Array<{ referrer: string; count: number }>;
 }
 
+/** Create data directory and events file if they don't exist yet */
 async function ensureStorage() {
   await fs.mkdir(dataDir, { recursive: true });
   try {
