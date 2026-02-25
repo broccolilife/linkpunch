@@ -215,8 +215,18 @@ function HomePageContent() {
       {hasWebGL ? (
         <Suspense
           fallback={
-            <div className="flex min-h-screen items-center justify-center text-sm text-white/70">
-              Loading experience…
+            <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-4">
+              <div className="h-12 w-12 animate-spin rounded-full border-2 border-white/10 border-t-indigo-400" />
+              <p className="animate-pulse text-sm text-white/50">Loading 3D experience…</p>
+              <div className="mx-auto flex w-full max-w-md flex-col gap-3">
+                {[...Array(4)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-16 animate-pulse rounded-2xl bg-white/5"
+                    style={{ animationDelay: `${i * 150}ms` }}
+                  />
+                ))}
+              </div>
             </div>
           }
         >
@@ -283,8 +293,9 @@ export default function HomePage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-black text-white/70">
-          Loading experience…
+        <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-black">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/10 border-t-indigo-400" />
+          <p className="text-sm text-white/50">Initializing…</p>
         </div>
       }
     >
