@@ -69,6 +69,16 @@ async function readEvents(): Promise<StoredEvent[]> {
     .filter((value): value is StoredEvent => Boolean(value));
 }
 
+/** Convert a Map<string, number> to a sorted-descending array of {key, count} objects. */
+function mapToSortedArray<K extends string>(
+  map: Map<string, number>,
+  keyName: K
+): Array<Record<K, string> & { count: number }> {
+  return Array.from(map.entries())
+    .map(([key, count]) => ({ [keyName]: key, count } as Record<K, string> & { count: number }))
+    .sort((a, b) => b.count - a.count);
+}
+
 function normalizeReferrer(referrer?: string): string {
   if (!referrer) return "(direct)";
   const trimmed = referrer.trim();
@@ -119,18 +129,10 @@ export async function getStats(): Promise<StatsSummary> {
     }
   }
 
-  const clicksByBanner = Array.from(clicksMap.entries())
-    .map(([id, clicks]) => ({ id, clicks }))
-    .sort((a, b) => b.clicks - a.clicks);
-
-  const devices = Array.from(deviceMap.entries())
-    .map(([device, count]) => ({ device, count }))
-    .sort((a, b) => b.count - a.count);
-
-  const topReferrers = Array.from(referrerMap.entries())
-    .map(([referrer, count]) => ({ referrer, count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 10);
+  // Use shared utility to eliminate repeated Map→sorted-array boilerplate
+  const clicksByBanner = mapToSortedArray(clicksMap, "id").map(({ id, count }) => ({ id, clicks: count }));
+  const devices = mapToSortedArray(deviceMap, "device");
+  const topReferrers = mapToSortedArray(referrerMap, "referrer").slice(0, 10);
 
   return {
     totalViews,

@@ -43,6 +43,111 @@ interface Banner3DProps {
   onOpen: (banner: BannerData) => void;
 }
 
+/** Shared face content rendered on both front and back of flippable banners. */
+function BannerFaceContent({
+  banner,
+  dimensions,
+  emblemX,
+  circleRadius,
+  textLeftX,
+  emblemTexture,
+  hasEmblemImage,
+  label,
+  labelColor,
+}: {
+  banner: BannerData;
+  dimensions: Banner3DProps["dimensions"];
+  emblemX: number;
+  circleRadius: number;
+  textLeftX: number;
+  emblemTexture: ReturnType<typeof useTexture>;
+  hasEmblemImage: boolean;
+  label: string;
+  labelColor: string;
+}) {
+  const emblem = banner.emblem;
+  return (
+    <>
+      {emblem ? (
+        <group position={[emblemX, 0, 0]}>
+          <mesh position={[0, 0, dimensions.depth * 0.2]}>
+            <circleGeometry args={[circleRadius, 48]} />
+            <meshStandardMaterial color={emblem.color} metalness={0.5} roughness={0.25} />
+          </mesh>
+          {hasEmblemImage ? (
+            <mesh position={[0, 0, dimensions.depth * 0.24]}>
+              <circleGeometry args={[circleRadius * 0.82, 48]} />
+              <meshBasicMaterial map={emblemTexture} toneMapped={false} transparent />
+            </mesh>
+          ) : (
+            <Text
+              position={[0, 0, dimensions.depth * 0.26]}
+              fontSize={circleRadius * 0.78}
+              color="#ffffff"
+              anchorX="center"
+              anchorY="middle"
+              material-toneMapped={false}
+              fontWeight={600}
+            >
+              {emblem.label}
+            </Text>
+          )}
+        </group>
+      ) : null}
+      <Text
+        position={[textLeftX, dimensions.height * 0.05, 0]}
+        fontSize={dimensions.titleSize}
+        color="#f8fafc"
+        anchorX="left"
+        anchorY="middle"
+        maxWidth={dimensions.width - dimensions.padding * 1.6}
+        lineHeight={1.1}
+        material-toneMapped={false}
+        outlineWidth={0.007}
+        outlineColor="#0f172a"
+        outlineOpacity={0.38}
+        outlineBlur={0.2}
+        fontWeight={600}
+      >
+        {banner.title}
+      </Text>
+      {banner.description ? (
+        <Text
+          position={[textLeftX, -dimensions.height * 0.28, 0]}
+          fontSize={dimensions.descriptionSize}
+          color="#e2e8f0"
+          anchorX="left"
+          anchorY="middle"
+          maxWidth={dimensions.width - dimensions.padding * 1.4}
+          lineHeight={1.2}
+          material-toneMapped={false}
+          outlineWidth={0.005}
+          outlineColor="#111827"
+          outlineOpacity={0.32}
+          outlineBlur={0.16}
+        >
+          {banner.description}
+        </Text>
+      ) : null}
+      <Text
+        position={[textLeftX, dimensions.height * 0.28, 0]}
+        fontSize={dimensions.descriptionSize * 0.9}
+        color={labelColor}
+        anchorX="left"
+        anchorY="middle"
+        maxWidth={dimensions.width - dimensions.padding * 1.4}
+        material-toneMapped={false}
+        outlineWidth={0.0045}
+        outlineColor="#0f172a"
+        outlineOpacity={0.28}
+        outlineBlur={0.12}
+      >
+        {label}
+      </Text>
+    </>
+  );
+}
+
 export default function Banner3D({ banner, position, dimensions, onOpen }: Banner3DProps) {
   const groupRef = useRef<Group>(null);
   const isFlippable = banner.flippable ?? false;
@@ -123,163 +228,35 @@ export default function Banner3D({ banner, position, dimensions, onOpen }: Banne
           }}
         >
           {materialElement}
+          {/* Front face */}
           <group position={[0, 0, dimensions.depth / 2 + 0.01]} visible={frontVisible}>
-            {emblem ? (
-              <group position={[emblemX, 0, 0]}>
-                <mesh position={[0, 0, dimensions.depth * 0.2]}>
-                  <circleGeometry args={[circleRadius, 48]} />
-                  <meshStandardMaterial color={emblem.color} metalness={0.5} roughness={0.25} />
-                </mesh>
-                {hasEmblemImage ? (
-                  <mesh position={[0, 0, dimensions.depth * 0.24]}>
-                    <circleGeometry args={[circleRadius * 0.82, 48]} />
-                    <meshBasicMaterial map={emblemTexture} toneMapped={false} transparent />
-                  </mesh>
-                ) : (
-                  <Text
-                    position={[0, 0, dimensions.depth * 0.26]}
-                    fontSize={circleRadius * 0.78}
-                    color="#ffffff"
-                    anchorX="center"
-                    anchorY="middle"
-                    material-toneMapped={false}
-                    fontWeight={600}
-                  >
-                    {emblem.label}
-                  </Text>
-                )}
-              </group>
-            ) : null}
-            <Text
-              position={[textLeftX, isFlippable ? dimensions.height * 0.05 : 0, 0]}
-              fontSize={dimensions.titleSize}
-              color="#f8fafc"
-              anchorX="left"
-              anchorY="middle"
-              maxWidth={dimensions.width - dimensions.padding * 1.6}
-              lineHeight={1.1}
-              material-toneMapped={false}
-              outlineWidth={0.007}
-              outlineColor="#0f172a"
-              outlineOpacity={0.38}
-              outlineBlur={0.2}
-              fontWeight={600}
-            >
-              {banner.title}
-            </Text>
-            {banner.description ? (
-              <Text
-                position={[textLeftX, -dimensions.height * 0.28, 0]}
-                fontSize={dimensions.descriptionSize}
-                color="#e2e8f0"
-                anchorX="left"
-                anchorY="middle"
-                maxWidth={dimensions.width - dimensions.padding * 1.4}
-                lineHeight={1.2}
-                material-toneMapped={false}
-                outlineWidth={0.005}
-                outlineColor="#111827"
-                outlineOpacity={0.32}
-                outlineBlur={0.16}
-              >
-                {banner.description}
-              </Text>
-            ) : null}
-            {isFlippable ? (
-              <Text
-                position={[textLeftX, dimensions.height * 0.28, 0]}
-                fontSize={dimensions.descriptionSize * 0.9}
-                color="#cbd5f5"
-                anchorX="left"
-                anchorY="middle"
-                maxWidth={dimensions.width - dimensions.padding * 1.4}
-                material-toneMapped={false}
-                outlineWidth={0.0045}
-                outlineColor="#0f172a"
-                outlineOpacity={0.28}
-                outlineBlur={0.12}
-              >
-                Tap to flip
-              </Text>
-            ) : null}
+            <BannerFaceContent
+              banner={banner}
+              dimensions={dimensions}
+              emblemX={emblemX}
+              circleRadius={circleRadius}
+              textLeftX={textLeftX}
+              emblemTexture={emblemTexture}
+              hasEmblemImage={hasEmblemImage}
+              label={isFlippable ? "Tap to flip" : ""}
+              labelColor="#cbd5f5"
+            />
           </group>
 
+          {/* Back face (flippable banners only) */}
           {isFlippable ? (
             <group rotation={[0, Math.PI, 0]} position={[0, 0, dimensions.depth / 2 + 0.01]} visible={backVisible}>
-              {emblem ? (
-                <group position={[emblemX, 0, 0]}>
-                  <mesh position={[0, 0, dimensions.depth * 0.2]}>
-                    <circleGeometry args={[circleRadius, 48]} />
-                    <meshStandardMaterial color={emblem.color} metalness={0.5} roughness={0.25} />
-                  </mesh>
-                  {hasEmblemImage ? (
-                    <mesh position={[0, 0, dimensions.depth * 0.24]}>
-                      <circleGeometry args={[circleRadius * 0.82, 48]} />
-                      <meshBasicMaterial map={emblemTexture} toneMapped={false} transparent />
-                    </mesh>
-                  ) : (
-                    <Text
-                      position={[0, 0, dimensions.depth * 0.26]}
-                      fontSize={circleRadius * 0.78}
-                      color="#ffffff"
-                      anchorX="center"
-                      anchorY="middle"
-                      material-toneMapped={false}
-                      fontWeight={600}
-                    >
-                      {emblem.label}
-                    </Text>
-                  )}
-                </group>
-              ) : null}
-              <Text
-                position={[textLeftX, dimensions.height * 0.05, 0]}
-                fontSize={dimensions.titleSize * 0.85}
-                color="#f9fafb"
-                anchorX="left"
-                anchorY="middle"
-                maxWidth={dimensions.width - dimensions.padding * 1.5}
-                material-toneMapped={false}
-                outlineWidth={0.007}
-                outlineColor="#0f172a"
-                outlineOpacity={0.38}
-                outlineBlur={0.2}
-              >
-                {banner.title}
-              </Text>
-              {banner.description ? (
-                <Text
-                  position={[textLeftX, -dimensions.height * 0.22, 0]}
-                  fontSize={dimensions.descriptionSize}
-                  color="#cbd5f5"
-                  anchorX="left"
-                  anchorY="middle"
-                  maxWidth={dimensions.width - dimensions.padding * 1.6}
-                  lineHeight={1.2}
-                  material-toneMapped={false}
-                  outlineWidth={0.005}
-                  outlineColor="#111827"
-                  outlineOpacity={0.32}
-                  outlineBlur={0.16}
-                >
-                  {banner.description}
-                </Text>
-              ) : null}
-              <Text
-                position={[textLeftX, dimensions.height * 0.27, 0]}
-                fontSize={dimensions.descriptionSize * 0.9}
-                color="#94f6ff"
-                anchorX="left"
-                anchorY="middle"
-                maxWidth={dimensions.width - dimensions.padding * 1.8}
-                material-toneMapped={false}
-                outlineWidth={0.0045}
-                outlineColor="#0f172a"
-                outlineOpacity={0.28}
-                outlineBlur={0.12}
-              >
-                Tap to launch
-              </Text>
+              <BannerFaceContent
+                banner={banner}
+                dimensions={dimensions}
+                emblemX={emblemX}
+                circleRadius={circleRadius}
+                textLeftX={textLeftX}
+                emblemTexture={emblemTexture}
+                hasEmblemImage={hasEmblemImage}
+                label="Tap to launch"
+                labelColor="#94f6ff"
+              />
             </group>
           ) : null}
         </RoundedBox>
