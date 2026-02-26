@@ -13,7 +13,7 @@
     "@react-three/drei": "^9.96.3",
     "@react-three/fiber": "^8.15.15",
     "framer-motion": "^10.18.0",
-    "next": "14.2.3",
+    "next": "14.2.35",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "three": "^0.160.0",
