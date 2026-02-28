@@ -3,3 +3,7 @@ node_modules
 out
 data/events.jsonl
 .DS_Store
+
+# Environment files
+.env
+.env.*
